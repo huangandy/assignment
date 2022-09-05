@@ -16,7 +16,8 @@ class MainViewModel: ViewModel() {
     fun getAirPollution() {
         CoroutineScope(Dispatchers.Main).launch {
             val res = EPAClient.getAirPollution()
-            Log.i(TAG, res.toString())
+            val records = res.records
+            Log.i(TAG, records.toString())
         }
     }
 }
