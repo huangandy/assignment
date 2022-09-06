@@ -116,6 +116,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
                     R.id.nav_search -> {
                         if (!EPAHelper.mAirSites.isEmpty()) {
                             startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         } else {
                             Snackbar.make(mBinding.root, getString(R.string.main_retry_hint), Snackbar.LENGTH_SHORT).show()
                         }
