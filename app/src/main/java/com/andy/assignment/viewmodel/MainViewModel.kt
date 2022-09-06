@@ -38,7 +38,7 @@ class MainViewModel: ViewModel() {
                 passAirSites.value = EPAHelper.mAirSites.filter{
                     it.pm2dot5.toIntOrNull()?.run {
                         this > PM25_THRESHOLD
-                    } == true 
+                    } == true
                 }
                 unPassAirSites.value = EPAHelper.mAirSites.filter{
                         it.pm2dot5.toIntOrNull()?.run {

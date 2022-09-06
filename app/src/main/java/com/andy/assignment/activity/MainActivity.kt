@@ -8,6 +8,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.andy.assignment.EPAHelper
 import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
@@ -19,7 +20,7 @@ import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
+class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mViewModel: MainViewModel
@@ -47,6 +48,10 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
         mBinding.rcvPass.adapter = mPassSiteAdapter
         mPassSkeleton = mBinding.rcvPass.applySkeleton(R.layout.item_pass_site, 10)
 
+        mBinding.rcvPassSwipe.setOnRefreshListener {
+            mViewModel.getAirPollution()
+        }
+
         mUnPassSiteAdapter = SiteAdapter(type = SiteAdapter.TYPE.UNPASS)
         mBinding.rcvUnpass.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         mBinding.rcvUnpass.adapter = mUnPassSiteAdapter
@@ -66,17 +71,16 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
                 updateList(airsites)
                 notifyDataSetChanged()
             }
-            mBinding.pbLoading.visibility = View.GONE
         }
 
         mViewModel.passAirSites.observe(this@MainActivity) { airsites ->
+            mBinding.rcvPassSwipe.isRefreshing = false;
             mPassSkeleton.showOriginal()
             mPassSiteAdapter?.run {
                 setOnAdapterEventListener(this@MainActivity)
                 updateList(airsites)
                 notifyDataSetChanged()
             }
-            mBinding.pbLoading.visibility = View.GONE
         }
 
         mViewModel.hint.observe(this) { hint ->
@@ -85,7 +89,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
                     MainViewModel.FETCH_STATUS.FETCHING -> {
                         mUnPassSkeleton.showSkeleton()
                         mPassSkeleton.showSkeleton()
-                        mBinding.pbLoading.visibility = View.VISIBLE
+                        mBinding.rcvPassSwipe.isRefreshing = true
                         getString(R.string.hint_get_data)
                     }
                     MainViewModel.FETCH_STATUS.SUCCESS -> {
@@ -131,4 +135,5 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
     override fun onSearchList(list: List<AirSite>) {
 
     }
+
 }
