@@ -7,13 +7,15 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object EPAClient {
     private const val mEPAURL = "https://data.epa.gov.tw"
     private const val mMyNas = "https://nodered.huangtengweinas.synology.me:1881"
     private val mEPAService: EPAService
     init {
-        val client = OkHttpClient.Builder().build()
+
+        val client = OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).connectTimeout(60, TimeUnit.SECONDS).build()
         val retrofit = Retrofit.Builder()
             .baseUrl(mEPAURL)
             .addConverterFactory(GsonConverterFactory.create())
