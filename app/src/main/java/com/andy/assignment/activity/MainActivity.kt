@@ -56,6 +56,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
         mBinding.rcvUnpass.adapter = mUnPassSiteAdapter
         mUnPassSkeleton = mBinding.rcvUnpass.applySkeleton(R.layout.item_unpass_site)
 
+        // Refresh Button
         mBinding.btnReload.setOnClickListener({
             mBinding.btnReload.visibility = View.GONE
             mViewModel.getAirPollution();
@@ -64,6 +65,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
 
     override fun initVMObserver() {
 
+        // Update unpass site list
         mViewModel.unPassAirSites.observe(this@MainActivity) { airsites ->
             mUnPassSkeleton.showOriginal()
             mUnPassSiteAdapter?.run {
@@ -72,8 +74,10 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
             }
         }
 
+        // Update pass site list
         mViewModel.passAirSites.observe(this@MainActivity) { airsites ->
-            mBinding.rcvPassSwipe.isRefreshing = false;
+            mBinding.rcvPassSwipe.isRefreshing = false; // can put in unPassAirSites also ok.
+            // close skeleton
             mPassSkeleton.showOriginal()
             mPassSiteAdapter?.run {
                 setOnAdapterEventListener(this@MainActivity)
@@ -106,14 +110,16 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         menu?.findItem(R.id.nav_search)?.apply {
+            // disable default search view action
             actionView = null
+            // set new view action to search menu item
             setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener { menuItem ->
                 when(itemId){
                     R.id.nav_search -> {
+                        // You can not go to search before get site data
                         if (!EPAHelper.mAirSites.isEmpty()) {
                             startActivity(Intent(this@MainActivity, SearchActivity::class.java))
                         } else {

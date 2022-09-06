@@ -37,25 +37,15 @@ class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventList
     }
 
     override fun initVMObserver() {
+
         mViewModel.airSites.observe(this@SearchActivity) { airsites ->
             mSiteAdapter?.run {
                 setOnAdapterEventListener(this@SearchActivity)
                 updateList(airsites)
-                filter?.filter("")
+                filter?.filter("") // TODO:: This is not a good idea to get empty list, should set in adapter first
                 notifyDataSetChanged()
             }
             mBinding.searchPbLoading.visibility = View.GONE
-        }
-
-        mViewModel.showSearchTip.observe(this@SearchActivity) { show ->
-            if(show) {
-                mBinding.txvListHint.text = getString(R.string.search_input_hint)
-                mBinding.txvListHint.visibility = View.VISIBLE
-
-            } else {
-                mBinding.txvListHint.visibility = View.GONE
-                mBinding.txvListHint.text = ""
-            }
         }
     }
 
