@@ -6,10 +6,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.andy.assignment.EPAHelper
 import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
+import com.andy.assignment.databinding.ActivityMainBinding
+import com.andy.assignment.databinding.ActivitySearchBinding
+import com.andy.assignment.viewmodel.MainViewModel
+import com.andy.assignment.viewmodel.SearchViewModel
+import com.andy.assignment.views.SiteAdapter
 
 class SearchActivity : BaseActivity(false, true) {
 
@@ -17,9 +27,37 @@ class SearchActivity : BaseActivity(false, true) {
         private val TAG = SearchActivity::class.java.simpleName
     }
 
+    private lateinit var mBinding: ActivitySearchBinding
+    private lateinit var mViewModel: SearchViewModel
+    private var mSiteAdapter: SiteAdapter? = null
+
+    override fun initViews() {
+        mSiteAdapter = SiteAdapter()
+        mBinding.rcvSite.layoutManager = LinearLayoutManager(this)
+        mBinding.rcvSite.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        mBinding.rcvSite.adapter = mSiteAdapter
+    }
+
+    override fun initVMObserver() {
+        mViewModel.airSites.observe(this@SearchActivity) { airsites ->
+            mSiteAdapter?.run {
+                updateList(airsites)
+                notifyDataSetChanged()
+            }
+            mBinding.searchPbLoading.visibility = View.GONE
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        mViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        mBinding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.getAirPollution()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

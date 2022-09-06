@@ -10,11 +10,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object EPAClient {
     private const val mEPAURL = "https://data.epa.gov.tw"
+    private const val mMyNas = "https://nodered.huangtengweinas.synology.me:1881"
     private val mEPAService: EPAService
     init {
         val client = OkHttpClient.Builder().build()
         val retrofit = Retrofit.Builder()
-            .baseUrl(mEPAURL)
+            .baseUrl(mMyNas)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

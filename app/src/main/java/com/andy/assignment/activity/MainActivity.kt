@@ -15,19 +15,17 @@ import com.andy.assignment.viewmodel.MainViewModel
 import com.andy.assignment.views.SiteAdapter
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mViewModel: MainViewModel
     private var mPassSiteAdapter: SiteAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        initViews()
-        initVMObserver()
+        super.onCreate(savedInstanceState)
     }
 
     override fun onResume() {
@@ -35,7 +33,7 @@ class MainActivity : BaseActivity() {
         mViewModel.getAirPollution()
     }
 
-    private fun initViews() {
+    override fun initViews() {
         mPassSiteAdapter = SiteAdapter()
         mBinding.rcvPass.layoutManager = LinearLayoutManager(this)
         mBinding.rcvPass.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
@@ -47,9 +45,16 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun initVMObserver() {
-        mViewModel.airSites.observe(this@MainActivity) { airsites ->
+    override fun initVMObserver() {
+
+        mViewModel.unPassAirSites.observe(this@MainActivity) { airsites ->
+
+            mBinding.pbLoading.visibility = View.GONE
+        }
+
+        mViewModel.passAirSites.observe(this@MainActivity) { airsites ->
             mPassSiteAdapter?.run {
+                setOnItemClickListener(this@MainActivity)
                 updateList(airsites)
                 notifyDataSetChanged()
             }
@@ -93,5 +98,9 @@ class MainActivity : BaseActivity() {
             })
         }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onClick() {
+        Snackbar.make(mBinding.root, "Hello", Snackbar.LENGTH_SHORT).show()
     }
 }

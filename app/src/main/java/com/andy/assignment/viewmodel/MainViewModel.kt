@@ -3,6 +3,7 @@ package com.andy.assignment.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.andy.assignment.EPAHelper
 import com.andy.assignment.networking.EPAClient
 import com.andy.assignment.views.AirSite
 import kotlinx.coroutines.CoroutineScope
@@ -13,12 +14,12 @@ import java.lang.Exception
 class MainViewModel: ViewModel() {
 
     val hint: MutableLiveData<Pair<FETCH_STATUS, String>> = MutableLiveData()
-    val airSites: MutableLiveData<List<AirSite>> = MutableLiveData<List<AirSite>>()
-
-    private val mAirSites = mutableListOf<AirSite>()
+    val passAirSites: MutableLiveData<List<AirSite>> = MutableLiveData<List<AirSite>>()
+    val unPassAirSites: MutableLiveData<List<AirSite>> = MutableLiveData<List<AirSite>>()
 
     companion object {
         private val TAG = MainViewModel::class.java.simpleName
+        private val PM25_THRESHOLD = 20
     }
 
     fun getAirPollution() {
@@ -27,18 +28,27 @@ class MainViewModel: ViewModel() {
             try {
                 val res = EPAClient.getAirPollution()
                 val records = res.records
-                Log.i(TAG, records.toString())
+
 
                 for (record in records) {
                     record.run {
-                        mAirSites.add(AirSite(siteid, sitename, county, pm25, status))
+
+                        EPAHelper.mAirSites.add(AirSite(siteid, sitename, county, pm25, status))
                     }
                 }
-
-                airSites.value = mAirSites
+                passAirSites.value = EPAHelper.mAirSites.filter{
+                    it.pm2dot5.toIntOrNull()?.let {
+                        it > PM25_THRESHOLD
+                    } == true
+                }
+                unPassAirSites.value = EPAHelper.mAirSites.filter{
+                    it.pm2dot5.toIntOrNull()?.let {
+                    it <= PM25_THRESHOLD
+                } == true }
                 hint.value = Pair(FETCH_STATUS.SUCCESS, "")
             } catch (err: Exception) {
-                airSites.value = mutableListOf()
+                passAirSites.value = mutableListOf()
+                unPassAirSites.value = mutableListOf()
                 hint.value = Pair(FETCH_STATUS.FAIL, err.message.toString())
             }
 

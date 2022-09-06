@@ -1,13 +1,23 @@
 package com.andy.assignment.base
 
+import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 
-open class BaseActivity(showBarTitle: Boolean = true, showBarBack: Boolean = false):  AppCompatActivity() {
+open abstract class BaseActivity(showBarTitle: Boolean = true, showBarBack: Boolean = false):  AppCompatActivity() {
 
     val mShowBarTitle = showBarTitle
     val mShowBarBack = showBarBack
+
+    abstract fun initViews()
+    abstract fun initVMObserver()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initViews()
+        initVMObserver()
+    }
 
     override fun onResume() {
         super.onResume()
