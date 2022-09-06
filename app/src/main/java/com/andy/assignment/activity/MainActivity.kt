@@ -23,10 +23,10 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mViewModel: MainViewModel
-    private var mPassSiteAdapter: SiteAdapter? = null
-    private var mUnPassSiteAdapter: SiteAdapter? = null
-    private lateinit var mUnPassSkeleton: Skeleton
-    private lateinit var mPassSkeleton: Skeleton
+    private var mPassSiteAdapter: SiteAdapter? = null   // Bottom classical List Adapter
+    private var mUnPassSiteAdapter: SiteAdapter? = null // Top Horizontal List Adapter
+    private lateinit var mUnPassSkeleton: Skeleton      // Show while fetching
+    private lateinit var mPassSkeleton: Skeleton        // Show while fetching
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
