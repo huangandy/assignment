@@ -76,11 +76,6 @@ class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventList
         EPAHelper.mAirSites = mutableListOf() //Fake clear
     }
 
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         val search = menu?.findItem(R.id.nav_search)
