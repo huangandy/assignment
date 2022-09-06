@@ -42,9 +42,10 @@ class MainViewModel: ViewModel() {
                     } == true
                 }
                 unPassAirSites.value = EPAHelper.mAirSites.filter{
-                    it.pm2dot5.toIntOrNull()?.let {
-                    it <= PM25_THRESHOLD
-                } == true }
+                        it.pm2dot5.toIntOrNull()?.let {
+                        it <= PM25_THRESHOLD
+                    } == true
+                }
                 hint.value = Pair(FETCH_STATUS.SUCCESS, "")
             } catch (err: Exception) {
                 passAirSites.value = mutableListOf()

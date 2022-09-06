@@ -53,8 +53,12 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_pass_site, parent, false)
+        val view = when(type) {
+            TYPE.PASS,TYPE.ALL -> LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_pass_site, parent, false)
+            TYPE.UNPASS -> LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_unpass_site, parent, false)
+        }
 
         return ViewHolder(view)
     }
@@ -65,12 +69,20 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
             txv_name.text = airSites[position].siteName
             txv_county.text = airSites[position].county
             txv_pm2dot5.text = airSites[position].pm2dot5
-            txv_status.text = if(airSites[position].status.equals("良好")) "The status is good, we want to go out to have fun." else airSites[position].status
-            img_more.visibility = if(!airSites[position].status.equals("良好")) View.VISIBLE else View.GONE
 
-            root.setOnClickListener {
-                if(!airSites[position].status.equals("良好")) this@SiteAdapter.mListener?.onClick()
+            when (type) {
+                TYPE.PASS, TYPE.ALL -> {
+                    txv_status.text = if(airSites[position].status.equals("良好")) "The status is good, we want to go out to have fun." else airSites[position].status
+                    img_more.visibility = if(!airSites[position].status.equals("良好")) View.VISIBLE else View.GONE
+                    root.setOnClickListener {
+                        if(!airSites[position].status.equals("良好")) this@SiteAdapter.mListener?.onClick()
+                    }
+                }
+                TYPE.UNPASS -> {
+                    txv_status.text = airSites[position].status
+                }
             }
+
         }
     }
 

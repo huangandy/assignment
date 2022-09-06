@@ -6,7 +6,8 @@
         <entry key="app/src/main/res/drawable/ic_navigate_right.xml" value="0.333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.14814814814814814" />
-        <entry key="app/src/main/res/layout/item_pass_site.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/item_pass_site.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/item_unpass_site.xml" value="0.33" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.1" />
       </map>
     </option>

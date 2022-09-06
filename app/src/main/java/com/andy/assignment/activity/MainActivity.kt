@@ -20,6 +20,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mViewModel: MainViewModel
     private var mPassSiteAdapter: SiteAdapter? = null
+    private var mUnPassSiteAdapter: SiteAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -34,10 +35,14 @@ class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
     }
 
     override fun initViews() {
-        mPassSiteAdapter = SiteAdapter()
+        mPassSiteAdapter = SiteAdapter(type = SiteAdapter.TYPE.PASS)
         mBinding.rcvPass.layoutManager = LinearLayoutManager(this)
         mBinding.rcvPass.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         mBinding.rcvPass.adapter = mPassSiteAdapter
+
+        mUnPassSiteAdapter = SiteAdapter(type = SiteAdapter.TYPE.UNPASS)
+        mBinding.rcvUnpass.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        mBinding.rcvUnpass.adapter = mUnPassSiteAdapter
 
         mBinding.btnReload.setOnClickListener({
             mBinding.btnReload.visibility = View.GONE
@@ -48,7 +53,10 @@ class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
     override fun initVMObserver() {
 
         mViewModel.unPassAirSites.observe(this@MainActivity) { airsites ->
-
+            mUnPassSiteAdapter?.run {
+                updateList(airsites)
+                notifyDataSetChanged()
+            }
             mBinding.pbLoading.visibility = View.GONE
         }
 
