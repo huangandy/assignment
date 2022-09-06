@@ -8,12 +8,15 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.andy.assignment.EPAHelper
 import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
 import com.andy.assignment.databinding.ActivityMainBinding
 import com.andy.assignment.viewmodel.MainViewModel
 import com.andy.assignment.views.AirSite
 import com.andy.assignment.views.SiteAdapter
+import com.faltenreich.skeletonlayout.Skeleton
+import com.faltenreich.skeletonlayout.applySkeleton
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
@@ -22,6 +25,8 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
     private lateinit var mViewModel: MainViewModel
     private var mPassSiteAdapter: SiteAdapter? = null
     private var mUnPassSiteAdapter: SiteAdapter? = null
+    private lateinit var mUnPassSkeleton: Skeleton
+    private lateinit var mPassSkeleton: Skeleton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -40,10 +45,12 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
         mBinding.rcvPass.layoutManager = LinearLayoutManager(this)
         mBinding.rcvPass.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         mBinding.rcvPass.adapter = mPassSiteAdapter
+        mPassSkeleton = mBinding.rcvPass.applySkeleton(R.layout.item_pass_site, 10)
 
         mUnPassSiteAdapter = SiteAdapter(type = SiteAdapter.TYPE.UNPASS)
         mBinding.rcvUnpass.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         mBinding.rcvUnpass.adapter = mUnPassSiteAdapter
+        mUnPassSkeleton = mBinding.rcvUnpass.applySkeleton(R.layout.item_unpass_site)
 
         mBinding.btnReload.setOnClickListener({
             mBinding.btnReload.visibility = View.GONE
@@ -54,6 +61,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
     override fun initVMObserver() {
 
         mViewModel.unPassAirSites.observe(this@MainActivity) { airsites ->
+            mUnPassSkeleton.showOriginal()
             mUnPassSiteAdapter?.run {
                 updateList(airsites)
                 notifyDataSetChanged()
@@ -62,6 +70,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
         }
 
         mViewModel.passAirSites.observe(this@MainActivity) { airsites ->
+            mPassSkeleton.showOriginal()
             mPassSiteAdapter?.run {
                 setOnAdapterEventListener(this@MainActivity)
                 updateList(airsites)
@@ -74,6 +83,8 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
             runOnUiThread {
                 when(hint.first) {
                     MainViewModel.FETCH_STATUS.FETCHING -> {
+                        mUnPassSkeleton.showSkeleton()
+                        mPassSkeleton.showSkeleton()
                         mBinding.pbLoading.visibility = View.VISIBLE
                         getString(R.string.hint_get_data)
                     }
@@ -100,7 +111,11 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
             setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener { menuItem ->
                 when(itemId){
                     R.id.nav_search -> {
-                        startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                        if (!EPAHelper.mAirSites.isEmpty()) {
+                            startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                        } else {
+                            Snackbar.make(mBinding.root, getString(R.string.main_retry_hint), Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 true

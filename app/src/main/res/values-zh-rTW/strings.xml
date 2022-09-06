@@ -5,4 +5,5 @@
     <string name="hint_get_data">獲取資料中</string>
     <string name="search_list_empty">找不到「%1$s」相關的空汙資訊</string>
     <string name="search_list_hint">請輸入「站名」\n查詢該地區空汙資訊</string>
+    <string name="main_retry_hint">尚未獲取任何資料,請稍後或點擊左下按鈕重試</string>
 </resources>

@@ -4,4 +4,5 @@
     <string name="hint_get_data">Getting Data</string>
     <string name="search_list_empty">Can not find a site with「%1$s」</string>
     <string name="search_list_hint">Get air pollution of site\n by searching with "Site Name"</string>
+    <string name="main_retry_hint">You do not have any data, Please retry to get data first.</string>
 </resources>

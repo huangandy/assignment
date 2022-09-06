@@ -15,7 +15,7 @@ object EPAClient {
     init {
         val client = OkHttpClient.Builder().build()
         val retrofit = Retrofit.Builder()
-            .baseUrl(mMyNas)
+            .baseUrl(mEPAURL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
