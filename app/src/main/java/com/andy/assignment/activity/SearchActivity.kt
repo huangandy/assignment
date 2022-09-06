@@ -14,6 +14,8 @@ import com.andy.assignment.base.BaseActivity
 import com.andy.assignment.databinding.ActivitySearchBinding
 import com.andy.assignment.viewmodel.SearchViewModel
 import com.andy.assignment.model.AirSite
+import com.andy.assignment.networking.service.EPAService
+import com.andy.assignment.orm.EPAHelper
 import com.andy.assignment.views.SiteAdapter
 
 class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventListener {
@@ -67,6 +69,11 @@ class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventList
     override fun onResume() {
         super.onResume()
         mViewModel.getAirPollution()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EPAHelper.mAirSites = mutableListOf() //Fake clear
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
