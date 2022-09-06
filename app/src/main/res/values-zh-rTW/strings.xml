@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">空氣污染</string>
+    <string name="search_input_hint">請輸入「站名」</string>
+    <string name="hint_get_data">獲取資料中</string>
+    <string name="search_list_empty">找不到「%1$s」相關的空汙資訊</string>
+    <string name="search_list_hint">請輸入「站名」\n查詢該地區空汙資訊</string>
 </resources>

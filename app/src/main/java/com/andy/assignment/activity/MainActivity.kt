@@ -12,10 +12,11 @@ import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
 import com.andy.assignment.databinding.ActivityMainBinding
 import com.andy.assignment.viewmodel.MainViewModel
+import com.andy.assignment.views.AirSite
 import com.andy.assignment.views.SiteAdapter
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
+class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener{
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mViewModel: MainViewModel
@@ -62,7 +63,7 @@ class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
 
         mViewModel.passAirSites.observe(this@MainActivity) { airsites ->
             mPassSiteAdapter?.run {
-                setOnItemClickListener(this@MainActivity)
+                setOnAdapterEventListener(this@MainActivity)
                 updateList(airsites)
                 notifyDataSetChanged()
             }
@@ -108,7 +109,11 @@ class MainActivity : BaseActivity(), SiteAdapter.OnItemClickListener{
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onClick() {
+    override fun onItemClick(){
         Snackbar.make(mBinding.root, "Hello", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onSearchList(list: List<AirSite>) {
+
     }
 }

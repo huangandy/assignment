@@ -32,18 +32,17 @@ class MainViewModel: ViewModel() {
 
                 for (record in records) {
                     record.run {
-
                         EPAHelper.mAirSites.add(AirSite(siteid, sitename, county, pm25, status))
                     }
                 }
                 passAirSites.value = EPAHelper.mAirSites.filter{
-                    it.pm2dot5.toIntOrNull()?.let {
-                        it > PM25_THRESHOLD
+                    it.pm2dot5.toIntOrNull()?.run {
+                        this > PM25_THRESHOLD
                     } == true
                 }
                 unPassAirSites.value = EPAHelper.mAirSites.filter{
-                        it.pm2dot5.toIntOrNull()?.let {
-                        it <= PM25_THRESHOLD
+                        it.pm2dot5.toIntOrNull()?.run {
+                        this <= PM25_THRESHOLD
                     } == true
                 }
                 hint.value = Pair(FETCH_STATUS.SUCCESS, "")

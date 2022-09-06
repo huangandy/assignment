@@ -19,9 +19,10 @@ import com.andy.assignment.databinding.ActivityMainBinding
 import com.andy.assignment.databinding.ActivitySearchBinding
 import com.andy.assignment.viewmodel.MainViewModel
 import com.andy.assignment.viewmodel.SearchViewModel
+import com.andy.assignment.views.AirSite
 import com.andy.assignment.views.SiteAdapter
 
-class SearchActivity : BaseActivity(false, true) {
+class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventListener {
 
     companion object {
         private val TAG = SearchActivity::class.java.simpleName
@@ -30,6 +31,7 @@ class SearchActivity : BaseActivity(false, true) {
     private lateinit var mBinding: ActivitySearchBinding
     private lateinit var mViewModel: SearchViewModel
     private var mSiteAdapter: SiteAdapter? = null
+    private var mCurrentSearchText: String? = null
 
     override fun initViews() {
         mSiteAdapter = SiteAdapter()
@@ -41,10 +43,23 @@ class SearchActivity : BaseActivity(false, true) {
     override fun initVMObserver() {
         mViewModel.airSites.observe(this@SearchActivity) { airsites ->
             mSiteAdapter?.run {
+                setOnAdapterEventListener(this@SearchActivity)
                 updateList(airsites)
+                filter?.filter("")
                 notifyDataSetChanged()
             }
             mBinding.searchPbLoading.visibility = View.GONE
+        }
+
+        mViewModel.showSearchTip.observe(this@SearchActivity) { show ->
+            if(show) {
+                mBinding.txvListHint.text = getString(R.string.search_input_hint)
+                mBinding.txvListHint.visibility = View.VISIBLE
+
+            } else {
+                mBinding.txvListHint.visibility = View.GONE
+                mBinding.txvListHint.text = ""
+            }
         }
     }
 
@@ -75,22 +90,49 @@ class SearchActivity : BaseActivity(false, true) {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    Log.i(TAG, "onQueryTextChange : $newText")
+                    Log.i(TAG, "onQueryTextChange $newText")
+                    mCurrentSearchText = newText
+                    mSiteAdapter?.filter?.filter(newText)
                     return true
                 }
-
             })
         }
 
-
         return super.onCreateOptionsMenu(menu)
     }
-
 
     private fun setFocused(searchView: SearchView) {
         searchView.requestFocus()
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun hasInput(): Boolean = !mCurrentSearchText.isNullOrEmpty()
+
+    override fun onItemClick() {
+
+    }
+
+    override fun onSearchList(list: List<AirSite>) {
+        runOnUiThread {
+
+            mBinding.rcvSite.apply {
+                visibility = if(hasInput()) View.VISIBLE else View.GONE
+            }
+
+            mBinding.txvListHint.apply {
+                if (list.isEmpty()) {
+                    text = getString(com.andy.assignment.R.string.search_list_empty, mCurrentSearchText)
+                    visibility = View.VISIBLE
+                } else if (!hasInput()) {
+                    text = getString(R.string.search_list_hint)
+                    visibility = android.view.View.VISIBLE
+                } else {
+                    text = ""
+                    visibility = View.GONE
+                }
+            }
+        }
     }
 
 }

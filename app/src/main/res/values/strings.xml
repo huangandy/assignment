@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Air Pollution</string>
-    <string name="search_input_hint">請輸入「站名」</string>
-    <string name="hint_get_data">Getting Data...</string>
+    <string name="search_input_hint">Search with Site Name</string>
+    <string name="hint_get_data">Getting Data</string>
+    <string name="search_list_empty">Can not find a site with「%1$s」</string>
+    <string name="search_list_hint">Get air pollution of site\n by searching with "Site Name"</string>
 </resources>

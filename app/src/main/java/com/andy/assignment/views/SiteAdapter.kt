@@ -1,5 +1,6 @@
 package com.andy.assignment.views
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,7 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
 
     private var airSites: MutableList<AirSite> = mutableListOf()
     private var mFilteredAirSites: MutableList<AirSite> = mutableListOf()
-    private var mListener: OnItemClickListener? = null
+    private var mListener: OnAdapterEventListener? = null
 
     enum class TYPE {
         ALL,
@@ -25,9 +26,10 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
 
     fun updateList(airSites: List<AirSite>) {
         this.airSites.addAll(airSites)
+        this.mFilteredAirSites.addAll(airSites)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnAdapterEventListener(listener: OnAdapterEventListener) {
         this.mListener = listener
     }
 
@@ -75,7 +77,7 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
                     txv_status.text = if(airSites[position].status.equals("良好")) "The status is good, we want to go out to have fun." else airSites[position].status
                     img_more.visibility = if(!airSites[position].status.equals("良好")) View.VISIBLE else View.GONE
                     root.setOnClickListener {
-                        if(!airSites[position].status.equals("良好")) this@SiteAdapter.mListener?.onClick()
+                        if(!airSites[position].status.equals("良好")) this@SiteAdapter.mListener?.onItemClick()
                     }
                 }
                 TYPE.UNPASS -> {
@@ -91,36 +93,37 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
+
                 val charString = constraint?.toString() ?: ""
-                if (charString.isEmpty()) mFilteredAirSites = airSites else {
-                    val filteredList = ArrayList<AirSite>()
-                    airSites
-                        .filter {
-                            (it.siteName.contains(constraint!!)) or
-                                    (it.siteId.contains(constraint)) or
-                                    (it.county.contains(constraint))
-
+                var filterResults = FilterResults()
+                if (charString.isEmpty()) {
+                    filterResults.apply {
+                        count = mFilteredAirSites.size
+                        values = mFilteredAirSites
+                    }
+                } else {
+                    val filteredList = mFilteredAirSites.filter {
+                            it.siteName.contains(charString)
                         }
-                        .forEach { filteredList.add(it) }
-                    mFilteredAirSites = filteredList
-
+                    filterResults.apply {
+                        count = filteredList.size
+                        values = filteredList
+                    }
                 }
-                return FilterResults().apply { values = mFilteredAirSites }
+                return filterResults
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-
-                mFilteredAirSites = if (results?.values == null)
-                    ArrayList()
-                else
-                    results.values as ArrayList<AirSite>
+                airSites = results?.values as MutableList<AirSite>
                 notifyDataSetChanged()
+                this@SiteAdapter.mListener?.onSearchList(airSites)
             }
         }
     }
 
-    interface OnItemClickListener {
-        fun onClick()
+    interface OnAdapterEventListener {
+        fun onItemClick()
+        fun onSearchList(list: List<AirSite>)
     }
 
 }

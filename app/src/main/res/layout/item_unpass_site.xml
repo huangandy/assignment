@@ -39,7 +39,8 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/item_txv_site_name"
@@ -49,7 +50,8 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/item_txv_site_pm2dot5"
@@ -59,7 +61,8 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -78,7 +81,8 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/item_txv_site_status"
@@ -88,7 +92,8 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/item_img_site_more"

@@ -14,6 +14,7 @@ import java.lang.Exception
 class SearchViewModel: ViewModel() {
 
     val airSites: MutableLiveData<List<AirSite>> = MutableLiveData<List<AirSite>>()
+    val showSearchTip: MutableLiveData<Boolean> = MutableLiveData()
 
     private val mAirSites = mutableListOf<AirSite>()
 
