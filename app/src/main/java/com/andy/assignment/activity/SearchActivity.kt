@@ -106,18 +106,21 @@ class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventList
 
     override fun onSearchList(list: List<AirSite>) {
         runOnUiThread {
-
+            // Update list status
             mBinding.rcvSite.apply {
                 visibility = if(hasInput()) View.VISIBLE else View.GONE
             }
 
+            // Update center hint
             mBinding.txvListHint.apply {
-                if (list.isEmpty()) {
+
+                if (list.isEmpty()) { // Search Empty
                     text = getString(com.andy.assignment.R.string.search_list_empty, mCurrentSearchText)
                     visibility = View.VISIBLE
                 } else if (!hasInput()) {
+                    // Default status but hide list view
                     text = getString(R.string.search_list_hint)
-                    visibility = android.view.View.VISIBLE
+                    visibility = View.VISIBLE
                 } else {
                     text = ""
                     visibility = View.GONE

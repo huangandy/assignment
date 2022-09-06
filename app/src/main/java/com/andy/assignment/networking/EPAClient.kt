@@ -11,19 +11,26 @@ import java.util.concurrent.TimeUnit
 
 object EPAClient {
     private const val mEPAURL = "https://data.epa.gov.tw"
-    private const val mMyNas = "https://nodered.huangtengweinas.synology.me:1881"
+    private const val mMyNas = "https://nodered.huangtengweinas.synology.me:1881" // My testing server, do have same response(0800~2300)
     private val mEPAService: EPAService
+
     init {
 
-        val client = OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).connectTimeout(60, TimeUnit.SECONDS).build()
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl(mEPAURL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
+
         mEPAService = retrofit.create(EPAService::class.java)
     }
 
+    //TODO::Should pass query param if needed
     suspend fun getAirPollution(): AirPollutionRes = withContext(Dispatchers.IO) {
         val response = mEPAService.getAirPollution()
         if (response.isSuccessful) {
