@@ -3,6 +3,7 @@ package com.andy.assignment.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -11,6 +12,11 @@ import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
 
 class SearchActivity : BaseActivity(false, true) {
+
+    companion object {
+        private val TAG = SearchActivity::class.java.simpleName
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -23,7 +29,7 @@ class SearchActivity : BaseActivity(false, true) {
 
         searchView.apply {
             setIconifiedByDefault(false)
-            queryHint = "請輸入「站名」"
+            queryHint = context.getString(R.string.search_input_hint)
             setFocused(this)
             setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -31,6 +37,7 @@ class SearchActivity : BaseActivity(false, true) {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    Log.i(TAG, "onQueryTextChange : $newText")
                     return true
                 }
 
@@ -40,6 +47,7 @@ class SearchActivity : BaseActivity(false, true) {
 
         return super.onCreateOptionsMenu(menu)
     }
+
 
     private fun setFocused(searchView: SearchView) {
         searchView.requestFocus()

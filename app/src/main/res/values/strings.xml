@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">空氣污染</string>
+    <string name="app_name">Air Pollution</string>
+    <string name="search_input_hint">請輸入「站名」</string>
+    <string name="hint_get_data">Getting Data...</string>
 </resources>
