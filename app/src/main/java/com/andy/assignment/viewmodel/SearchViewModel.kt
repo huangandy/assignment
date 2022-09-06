@@ -27,6 +27,8 @@ class SearchViewModel: ViewModel() {
             airSites.value = EPAHelper.mAirSites
             return
         }
+
+        //TODO::Will remove in future
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val res = EPAClient.getAirPollution()

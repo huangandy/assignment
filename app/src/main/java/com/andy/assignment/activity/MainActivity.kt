@@ -128,8 +128,8 @@ class MainActivity : BaseActivity(), SiteAdapter.OnAdapterEventListener {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onItemClick(){
-        Snackbar.make(mBinding.root, "Hello", Snackbar.LENGTH_SHORT).show()
+    override fun onItemClick(item: AirSite){
+        Snackbar.make(mBinding.root, item.siteName, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onSearchList(list: List<AirSite>) {

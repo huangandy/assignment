@@ -14,6 +14,10 @@ import com.andy.assignment.R
 
 class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAdapter.ViewHolder>(), Filterable {
 
+    companion object {
+        private val GOOD_STATUS = "良好"
+    }
+
     private var airSites: MutableList<AirSite> = mutableListOf()
     private var mFilteredAirSites: MutableList<AirSite> = mutableListOf()
     private var mListener: OnAdapterEventListener? = null
@@ -32,6 +36,8 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
     fun setOnAdapterEventListener(listener: OnAdapterEventListener) {
         this.mListener = listener
     }
+
+    private fun isGood(status: String) = status.equals(GOOD_STATUS)
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val txv_id : TextView
@@ -74,10 +80,11 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
 
             when (type) {
                 TYPE.PASS, TYPE.ALL -> {
-                    txv_status.text = if(airSites[position].status.equals("良好")) "The status is good, we want to go out to have fun." else airSites[position].status
-                    img_more.visibility = if(!airSites[position].status.equals("良好")) View.VISIBLE else View.GONE
+                    val isGood = isGood(airSites[position].status)
+                    txv_status.text = if(isGood) "The status is good, we want to go out to have fun." else airSites[position].status
+                    img_more.visibility = if(!isGood) View.VISIBLE else View.GONE
                     root.setOnClickListener {
-                        if(!airSites[position].status.equals("良好")) this@SiteAdapter.mListener?.onItemClick()
+                        if(!isGood) this@SiteAdapter.mListener?.onItemClick(airSites[position])
                     }
                 }
                 TYPE.UNPASS -> {
@@ -122,7 +129,7 @@ class SiteAdapter(private val type:TYPE = TYPE.ALL): RecyclerView.Adapter<SiteAd
     }
 
     interface OnAdapterEventListener {
-        fun onItemClick()
+        fun onItemClick(item: AirSite)
         fun onSearchList(list: List<AirSite>)
     }
 

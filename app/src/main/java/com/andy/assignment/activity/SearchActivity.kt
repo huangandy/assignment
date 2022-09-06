@@ -109,7 +109,7 @@ class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventList
 
     private fun hasInput(): Boolean = !mCurrentSearchText.isNullOrEmpty()
 
-    override fun onItemClick() {
+    override fun onItemClick(item: AirSite) {
 
     }
 
