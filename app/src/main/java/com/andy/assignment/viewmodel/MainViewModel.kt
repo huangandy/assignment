@@ -1,11 +1,10 @@
 package com.andy.assignment.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andy.assignment.EPAHelper
+import com.andy.assignment.orm.EPAHelper
 import com.andy.assignment.networking.EPAClient
-import com.andy.assignment.views.AirSite
+import com.andy.assignment.model.AirSite
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

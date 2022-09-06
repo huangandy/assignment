@@ -1,25 +1,19 @@
 package com.andy.assignment.activity
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.andy.assignment.EPAHelper
 import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
-import com.andy.assignment.databinding.ActivityMainBinding
 import com.andy.assignment.databinding.ActivitySearchBinding
-import com.andy.assignment.viewmodel.MainViewModel
 import com.andy.assignment.viewmodel.SearchViewModel
-import com.andy.assignment.views.AirSite
+import com.andy.assignment.model.AirSite
 import com.andy.assignment.views.SiteAdapter
 
 class SearchActivity : BaseActivity(false, true), SiteAdapter.OnAdapterEventListener {

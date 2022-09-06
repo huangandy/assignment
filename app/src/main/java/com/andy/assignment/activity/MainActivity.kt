@@ -8,13 +8,12 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.andy.assignment.EPAHelper
+import com.andy.assignment.orm.EPAHelper
 import com.andy.assignment.R
 import com.andy.assignment.base.BaseActivity
 import com.andy.assignment.databinding.ActivityMainBinding
 import com.andy.assignment.viewmodel.MainViewModel
-import com.andy.assignment.views.AirSite
+import com.andy.assignment.model.AirSite
 import com.andy.assignment.views.SiteAdapter
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
