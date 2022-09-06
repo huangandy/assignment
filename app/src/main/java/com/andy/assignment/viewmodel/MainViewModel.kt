@@ -19,7 +19,7 @@ class MainViewModel: ViewModel() {
 
     companion object {
         private val TAG = MainViewModel::class.java.simpleName
-        private val PM25_THRESHOLD = 20
+        private val PM25_THRESHOLD = 16
     }
 
     fun getAirPollution() {
